@@ -10,7 +10,10 @@ import Input from '@/components/ui/input/Input.vue'
 const registerfromSchema = toTypedSchema(z.object({
   registerName: z.string().min(2, 'Name too short').max(50),
   registerWallet: z.coerce.number().min(1, 'Invalid wallet number'),
-  registerPin: z.number(),
+  registerPin: z.coerce.number()
+    .int(' PIN must be an integer')
+    .min(1000, ' PIN must be 4 digits')
+    .max(9999, ' PIN must be 4 digits'),
   registerPassword: z.string().min(2).max(20)
 }))
 
@@ -105,7 +108,7 @@ const registerSubmit = form.handleSubmit((values) => {
               <FormControl>
                 <Input
                   v-bind="componentField"
-                  type="number"
+                  type="password"
                   placeholder="Create a PIN"
                   class="w-full rounded-md px-4 py-2 text-sm bg-gray-700/50 text-white placeholder:text-gray-400 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
                 />

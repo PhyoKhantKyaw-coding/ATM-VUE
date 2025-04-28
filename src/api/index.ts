@@ -12,6 +12,5 @@ class API {
   login = login
   register = register
 }
-
 const api = new API()
 export default api

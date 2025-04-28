@@ -17,3 +17,17 @@ type DepositePayload = {
     amount: number
     pin: number
 }
+type UserId = {
+    userId:string
+}
+type CheckBalanceResponse = {
+    message: string;
+    status: number;    
+    data: number;
+}
+type ChangePinPayload = {
+    id: string
+    oldPin: number
+    newPin: number
+    confirmPin: number
+}

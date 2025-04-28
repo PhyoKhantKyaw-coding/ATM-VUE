@@ -22,3 +22,27 @@ export const deposite ={
         });
     }
 }
+export const checkBalance = {
+    useMutation: (opt?: Partial<UseMutationOptions<CheckBalanceResponse, Error, UserId>>) => {
+        return useMutation<CheckBalanceResponse, Error, UserId>({
+            mutationFn: async (payload: UserId) => {
+                const response = await axios.get("User/CheckBalance", {params: payload});
+                return response.data;
+            },
+            ...opt,
+        });
+    }
+}
+export const changePin = {
+    useMutation: (opt?: Partial<UseMutationOptions<APIResponse, Error, ChangePinPayload>>) => {
+        return useMutation<APIResponse, Error, ChangePinPayload>({
+            mutationFn: async (payload: ChangePinPayload) => {
+                const response = await axios.patch("User/ChangePin", payload);
+                return response.data;
+            },
+            ...opt,
+        });
+    }
+}
+
+

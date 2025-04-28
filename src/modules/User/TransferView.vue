@@ -16,7 +16,10 @@ const isOpen = ref(false)
 const schema = z.object({
   ToAccountNumber: z.number().min(1, "Account Number is required"),
   amount: z.number().min(1, "Amount must be greater than 0"),
-  pin: z.number().min(1000, "PIN must be 4 digits").max(9999, "PIN must be 4 digits"),
+  pin: z.coerce.number()
+    .int(' PIN must be an integer')
+    .min(1000, ' PIN must be 4 digits')
+    .max(9999, ' PIN must be 4 digits'),
   message: z.string().optional(),
 })
 
@@ -40,11 +43,12 @@ const { mutate: transferMutate, isPending } = api.transfer.transfer.useMutation(
       toast.error(data.message)
       return
     }
+    const user = data.data
     const message = `Transfer Successful!
-      From: ${data.data.senderName} To: ${data.data.receiverName}
-      Amount: $${data.data.amount}
-      Description: ${data.data.description}
-      Date: ${new Date(data.data.transferDate).toLocaleString()}`;
+      From: ${user.senderName} To: ${user.receiverName}
+      Amount: $${user.amount}
+      Description: ${user.description}
+      Date: ${new Date(user.transferDate).toLocaleString()}`;
 
     toast.success(message, {
       style: {
@@ -83,9 +87,10 @@ const onSubmit = handleSubmit((formValues) => {
 
 <template>
   <Dialog v-model:open="isOpen">
-    <DialogContent class="sm:max-w-[500px] p-8 bg-opacity-50 backdrop-blur-lg rounded-lg shadow-xl bg-white/6">
+    <DialogContent class="sm:max-w-[500px] max-w-md bg-gray-800 text-white p-6 rounded-lg">
       <DialogHeader>
         <DialogTitle class="text-white text-9xl">Transfer Money</DialogTitle>
+        <p class="text-white text-lg">Please enter the details for the transfer.</p>
       </DialogHeader>
 
       <Form @submit="onSubmit" class="space-y-6 mt-6">
@@ -127,7 +132,7 @@ const onSubmit = handleSubmit((formValues) => {
             <FormControl>
               <Input
                 id="pin"
-                type="number"
+                type="password"
                 v-model="pin"
                 v-bind="componentField"
                 class="text-lg py-3 px-4 border-2 border-gray-300 bg-gray-500 rounded-md focus:ring-2 focus:ring-blue-500 w-full"

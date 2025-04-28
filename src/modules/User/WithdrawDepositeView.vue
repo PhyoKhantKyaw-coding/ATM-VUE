@@ -19,7 +19,10 @@ const isOpen = ref(false)
 // Define schema
 const schema = z.object({
   amount: z.number().min(1, 'Amount is required'),
-  confirmPin: z.number().min(4, 'PIN is required'),
+  confirmPin: z.coerce.number()
+    .int(' PIN must be an integer')
+    .min(1000, ' PIN must be 4 digits')
+    .max(9999, ' PIN must be 4 digits'),
 })
 
 // Setup form
@@ -91,7 +94,7 @@ const onSubmit = handleSubmit((values) => {
 
 <template>
 <Dialog v-model:open="isOpen" >
-    <DialogContent class="sm:max-w-[425px] p-8 bg-opacity-50 backdrop-blur-lg rounded-lg shadow-xl bg-white/6">
+    <DialogContent class="sm:max-w-[425px] max-w-md bg-gray-800 text-white p-6 rounded-lg">
       <DialogHeader>
         <DialogTitle class="text-white text-9xl">{{ dialogTitle }}</DialogTitle>
         <p class="text-white text-lg">Please enter the amount you want to {{ dialogTitle.toLowerCase() }}.</p>
@@ -111,7 +114,7 @@ const onSubmit = handleSubmit((values) => {
           <FormItem>
             <FormLabel class="text-lg text-white">Confirm PIN</FormLabel>
             <FormControl>
-              <Input id="confirm" type="number" v-model="confirmPin" v-bind="componentField"
+              <Input id="confirm" type="password" v-model="confirmPin" v-bind="componentField"
                 class="text-lg py-3 px-4 border-2 border-gray-300 bg-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
             </FormControl>
             <FormMessage />

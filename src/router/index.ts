@@ -18,7 +18,7 @@ const router = createRouter({
       ]
     },
     {
-      path: '/',
+      path: '/login',
       component: DefaultLayout,
       children: [
         {
@@ -27,21 +27,27 @@ const router = createRouter({
           component: AuthContainer
         }
       ]
+    },
+    {
+      path: '/',
+      redirect: '/login' // ✅ Default route to /login
     }
   ]  
 })
 router.beforeEach((to, _, next) => {
-  // const token = localStorage.get('token')
+  const token = localStorage.getItem("token")
 
-  // if (to.meta.requiresAuth && !token) {
-  //     next('/auth/login')
-  // } else if (to.name === 'NotFound') {
-  //     next()
-  // }  else if (!to.meta.requiresAuth && token) {
-  //     next('/')
-  // } else {
-  //     next()
-  // }
-  next()
+  if (to.meta.requiresAuth && !token) {
+      next('/')
+  } 
+  else if (to.name === 'login' && token) {
+      next('/home')
+  }
+  else if (to.name === 'home' && !token) {
+      next('/login')
+  }
+  else {
+      next()
+  }
 })
 export default router

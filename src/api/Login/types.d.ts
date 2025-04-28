@@ -3,7 +3,6 @@ type LoginPayload = {
     accountNumber: int
     password: string
 }
-
 type LoginResponse = {
     message: string;
     status: number;

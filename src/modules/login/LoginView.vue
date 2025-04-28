@@ -16,24 +16,29 @@ const loginAttempts = ref(0)
 // Login mutation
 const {mutate } = api.login.login.useMutation({
   onSuccess: (data) => {
-    console.log('Login response:', data)
-
     if (data.message === 'Invalid username or password.') {
       toast.error('Invalid username or password.')
       return
     }
-
     const innerData = data.data
-
     if (innerData?.passwordStatus === false && innerData?.accountStatus === true) {
       loginAttempts.value++
-      toast.error(`Incorrect password. Attempt ${loginAttempts.value}/3`)
+      toast.warning(`Incorrect password. Attempt ${loginAttempts.value}/3`)
       if (loginAttempts.value >= 3) {
-        toast.error('Too many failed login attempts. Restarting...')
-        setTimeout(() => location.reload(), 1500)
-
-        location.reload()
-      }
+      toast(
+        "Too many failed login attempts. Please restart the app",
+        {
+          action: {
+            label: "Restart",
+            onClick: () => {
+              location.reload()
+            }
+          },
+          duration: 10000,
+          description: "Your account is temporarily locked.",
+        }
+      )
+    }
       return
     }
     localStorage.setItem('userId', innerData.data.userID)
@@ -68,7 +73,7 @@ const onSubmit = form.handleSubmit((values) => {
     password: values.password
   })
 })
-</script> 
+</script>  
 
 <template>
       <div class="bg-gradient-to-br from-gray-700 via-gray-800 to-gray-900 border border-gray-600 rounded-2xl shadow-2xl w-full max-w-md p-8 text-white">
