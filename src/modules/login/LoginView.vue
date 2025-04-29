@@ -44,7 +44,7 @@ const {mutate } = api.login.login.useMutation({
     localStorage.setItem('userId', innerData.data.userID)
     localStorage.setItem('token', innerData.token)
     toast.success('Login successful!')
-    router.push('/home')
+    router.push('/')
   },
   onError: (error) => {
     toast.error('Login failed. Check console for details.')

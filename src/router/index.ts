@@ -1,19 +1,20 @@
-import DefaultLayout from '@/layout/DefaultLayout.vue'
-import ATMHomeView from '@/modules/home/ATMHomeView.vue'
-import AuthContainer from '@/modules/login/AuthContainer.vue'
-import { createRouter, createWebHistory } from 'vue-router'
+import DefaultLayout from '@/layout/DefaultLayout.vue';
+import ATMHomeView from '@/modules/home/ATMHomeView.vue';
+import AuthContainer from '@/modules/login/AuthContainer.vue';
+import { createRouter, createWebHistory } from 'vue-router';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/home',
+      path: '/',
       component: DefaultLayout,
       children: [
         {
-          name: 'home', 
+          name: 'home',
           path: '',
-          component: ATMHomeView
+          component: ATMHomeView,
+          meta: { requiresAuth: true }
         }
       ]
     },
@@ -22,32 +23,34 @@ const router = createRouter({
       component: DefaultLayout,
       children: [
         {
-          name: 'login', 
+          name: 'login',
           path: '',
-          component: AuthContainer
+          component: AuthContainer,
+          meta: { requiresAuth: false }
         }
       ]
     },
     {
-      path: '/',
-      redirect: '/login' // ✅ Default route to /login
+      path: '/:catchAll(.*)',
+      redirect: '/login'
     }
-  ]  
-})
-router.beforeEach((to, _, next) => {
-  const token = localStorage.getItem("token")
+  ]
+});
+
+
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token');
+
 
   if (to.meta.requiresAuth && !token) {
-      next('/')
-  } 
-  else if (to.name === 'login' && token) {
-      next('/home')
+    next('/login');
   }
-  else if (to.name === 'home' && !token) {
-      next('/login')
+
+  else if (token && to.name === 'login') {
+    next('/');
+  } else {
+    next();
   }
-  else {
-      next()
-  }
-})
-export default router
+});
+
+export default router;

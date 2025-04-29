@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 // Props
 const props = defineProps<{
   open: boolean;
-  dialogTitle: string;  
+  dialogTitle: string;
 }>();
 const emit = defineEmits(["update:open"]);
 
@@ -37,46 +37,61 @@ const paginatedTransferData = computed(() => {
   return transferHistoryData.value.slice(start, end);
 });
 
-// API Mutations
-const getTransactionHistory = api.transfer.getTransactionHistory.useMutation({
-  onSuccess: (data) => {
-    transactionHistoryData.value = data.data;
-  },
-  onError: (error) => {
-    console.error("Failed to fetch Transaction History:", error);
+// Queries
+const { refetch: refetchTransaction, data: transactionData } = api.transfer.getTransactionHistory.useQuery(userId, {
+  enabled: false,  // Disable automatic fetching
+});
+
+const { refetch: refetchTransfer, data: transferData } = api.transfer.getTransferHistory.useQuery(userId, {
+  enabled: false,  // Disable automatic fetching
+});
+
+// Log the API response for debugging
+watch(transactionData, (data) => {
+  if (data) {
+    console.log("Transaction data:", data);  // Log the full response data
+    if (data.data) {
+      console.log("Transaction data content:", data.data);
+      transactionHistoryData.value = data.data;  // Update the transaction history data
+    } else {
+      console.log("No transaction data found.");
+    }
+  } else {
+    console.log("Transaction data is null or undefined.");
   }
 });
 
-const getTransferHistory = api.transfer.getTransferHistory.useMutation({
-  onSuccess: (data) => {
-    transferHistoryData.value = data.data;
-  },
-  onError: (error) => {
-    console.error("Failed to fetch Transfer History:", error);
+watch(transferData, (data) => {
+  if (data) {
+    console.log("Transfer data:", data);  // Log the full response data
+    if (data.data) {
+      console.log("Transfer data content:", data.data);
+      transferHistoryData.value = data.data;  // Update the transfer history data
+    } else {
+      console.log("No transfer data found.");
+    }
+  } else {
+    console.log("Transfer data is null or undefined.");
   }
 });
 
 // Toggle history type
-const toggleHistoryType = () => {
+const toggleHistoryType = async () => {
   isTransactionHistory.value = !isTransactionHistory.value;
   currentPage.value = 1; // Reset page
+
   if (isTransactionHistory.value) {
-    getTransactionHistory.mutate({ userId });
+    await refetchTransaction();  // Refetch transaction data
   } else {
-    getTransferHistory.mutate({ userId });
+    await refetchTransfer();  // Refetch transfer data
   }
 };
 
 // Pagination handlers
 const nextPage = () => {
-  if (isTransactionHistory.value) {
-    if (currentPage.value * itemsPerPage < transactionHistoryData.value.length) {
-      currentPage.value++;
-    }
-  } else {
-    if (currentPage.value * itemsPerPage < transferHistoryData.value.length) {
-      currentPage.value++;
-    }
+  const currentData = isTransactionHistory.value ? transactionHistoryData.value : transferHistoryData.value;
+  if (currentPage.value * itemsPerPage < currentData.length) {
+    currentPage.value++;
   }
 };
 
@@ -87,10 +102,15 @@ const prevPage = () => {
 };
 
 // Watch for dialog open
-watch(() => props.open, (newVal) => {
+watch(() => props.open, async (newVal) => {
   if (newVal) {
     currentPage.value = 1;
-    getTransactionHistory.mutate({ userId });
+    // Refetch the appropriate data when dialog opens
+    if (isTransactionHistory.value) {
+      await refetchTransaction();
+    } else {
+      await refetchTransfer();
+    }
   }
 });
 

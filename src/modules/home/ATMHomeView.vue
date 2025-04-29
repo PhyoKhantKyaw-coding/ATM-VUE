@@ -10,11 +10,11 @@ import {
   Key,
   LogOut
 } from 'lucide-vue-next'
-import WithdrawDepositDialog from '../User/WithdrawDepositeView.vue'
-import TransferView from '../User/TransferView.vue'
-import CheckBalanceView from '../User/CheckBalanceView.vue'; 
-import ChangePinView from '../User/ChangePinView.vue';
-import HistoryView from '../User/HistoryView.vue';
+import WithdrawDepositDialog from '../user/WithdrawDepositeView.vue'
+import TransferView from '../user/TransferView.vue'
+import CheckBalanceView from '../user/CheckBalanceView.vue'; 
+import ChangePinView from '../user/ChangePinView.vue';
+import HistoryView from '../user/HistoryView.vue';
 import { ref } from 'vue'
 
 import { useRouter } from 'vue-router'
@@ -23,7 +23,7 @@ const router = useRouter()
 
 const handleLogout = () => {
   localStorage.clear() 
-  router.push('/') 
+  router.push('/login') 
 }
 // Dialog control
 const isWithdrawDialogOpen = ref(false)

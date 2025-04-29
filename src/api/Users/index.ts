@@ -1,5 +1,6 @@
 import axios from "axios";
-import { useMutation, type UseMutationOptions } from "@tanstack/vue-query";
+import { useMutation, type UseMutationOptions} from "@tanstack/vue-query";
+import { type UseQueryOptions, useQuery } from '@tanstack/vue-query';
 export const withdraw = {
     useMutation: (opt?: Partial<UseMutationOptions<APIResponse, Error, WithdrawPayload>>) => {
         return useMutation<APIResponse, Error, WithdrawPayload>({
@@ -22,14 +23,17 @@ export const deposite ={
         });
     }
 }
+
 export const checkBalance = {
-    useMutation: (opt?: Partial<UseMutationOptions<CheckBalanceResponse, Error, UserId>>) => {
-        return useMutation<CheckBalanceResponse, Error, UserId>({
-            mutationFn: async (payload: UserId) => {
-                const response = await axios.get("User/CheckBalance", {params: payload});
+    useQuery: (userId: string, opt?: Partial<UseQueryOptions<CheckBalanceResponse, Error>>) => {
+        return useQuery<CheckBalanceResponse, Error>({
+            queryKey: ['checkBalance', userId],
+            queryFn: async () => {
+                const response = await axios.get("User/CheckBalance", { params: { userId } });
                 return response.data;
             },
-            ...opt,
+            enabled: !!userId, 
+            ...opt
         });
     }
 }

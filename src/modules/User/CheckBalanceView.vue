@@ -1,43 +1,32 @@
 <script setup lang="ts">
-import { ref, defineProps, watch, defineEmits } from "vue";
+import { defineProps, defineEmits,watch } from "vue";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import api from "@/api";
 
 const props = defineProps<{ open: boolean; dialogTitle: string }>();
 const emit = defineEmits(["update:open"]);
 
-const balance = ref<number | null>(null);
-const { mutateAsync } = api.user.checkBalance.useMutation();
+const userId = localStorage.getItem("userId");
 
-const fetchBalance = async () => {
-  const userId = localStorage.getItem("userId");
-  if (!userId) {
-    console.error("User ID not found in localStorage");
-    return;
-  }
-  try {
-    const response = await mutateAsync({ userId: userId });
-    balance.value = response.data;
-  } catch (error) {
-    console.error("Error fetching balance", error);
-  }
-};
+// If userId is missing, you can handle it safely
+const { data: balanceResponse, refetch } = api.user.checkBalance.useQuery(userId || "");
 
-// Watch for open
+// Watch for dialog open
 watch(
   () => props.open,
   (newVal) => {
     if (newVal) {
-      fetchBalance();
+      refetch();
     }
   }
 );
 
-// when dialog needs to close
 const handleClose = () => {
   emit('update:open', false);
 };
 </script>
+
+
 <template>
     <Dialog :open="props.open" @update:open="handleClose">
       <DialogContent class="max-w-md bg-gray-800 text-white p-6 rounded-lg">
@@ -52,11 +41,10 @@ const handleClose = () => {
             id="balance"
             type="text"
             disabled
-            :value="balance !== null ? `${balance} MMK` : 'Loading...'"
+            :value="balanceResponse !== undefined ? `${balanceResponse.data} MMK` : 'Loading...'"
             class="text-lg py-3 px-5 w-full border-2 border-gray-500 rounded-md focus:outline-none bg-gray-700"
           />
         </div>
       </DialogContent>
     </Dialog>
-  </template>
-  
+</template>
