@@ -1,6 +1,7 @@
 import DefaultLayout from '@/layout/DefaultLayout.vue';
 import ATMHomeView from '@/modules/home/ATMHomeView.vue';
-import AuthContainer from '@/modules/login/AuthContainer.vue';
+import LoginView from '@/modules/login/LoginView.vue';
+import RegisterView from '@/modules/register/RegisterView.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
 const router = createRouter({
@@ -25,13 +26,25 @@ const router = createRouter({
         {
           name: 'login',
           path: '',
-          component: AuthContainer,
+          component: LoginView,
           meta: { requiresAuth: false }
         }
       ]
     },
     {
-      path: '/:catchAll(.*)',
+      path: '/register',
+      component: DefaultLayout,
+      children: [
+        {
+          name: 'register',
+          path: '',
+          component: RegisterView,
+          meta: { requiresAuth: false }
+        }
+      ]
+    },
+    {
+      path: '/',
       redirect: '/login'
     }
   ]
@@ -40,12 +53,9 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token');
-
-
   if (to.meta.requiresAuth && !token) {
     next('/login');
   }
-
   else if (token && to.name === 'login') {
     next('/');
   } else {

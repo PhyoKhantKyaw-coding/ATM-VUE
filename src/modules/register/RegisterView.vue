@@ -7,6 +7,7 @@ import * as z from 'zod'
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form'
 import Button from '@/components/ui/button/Button.vue'
 import Input from '@/components/ui/input/Input.vue'
+import { useRouter } from 'vue-router'
 const registerfromSchema = toTypedSchema(z.object({
   registerName: z.string().min(2, 'Name too short').max(50),
   registerWallet: z.coerce.number().min(1, 'Invalid wallet number'),
@@ -16,19 +17,21 @@ const registerfromSchema = toTypedSchema(z.object({
     .max(9999, ' PIN must be 4 digits'),
   registerPassword: z.string().min(2).max(20)
 }))
-
+const router = useRouter()
 const form = useForm({
   validationSchema: registerfromSchema,
 })
+const login= () => {
+  router.push('/login')
+}
 
-const emit = defineEmits(['toggle-form']) 
 
 const { mutate } = api.register.register.useMutation({
   onSuccess: (data) => {
     console.log('Register success response:', data)
     if (data.status === 0) {
       toast.success('Registration successful') 
-      emit('toggle-form')                       
+      login()                 
     } else {
       toast.error('Registration failed')       
     }
@@ -140,7 +143,7 @@ const registerSubmit = form.handleSubmit((values) => {
           </Button>
           <p class="text-sm text-gray-400 mt-4 text-center">
             Already have an account?
-            <span @click="$emit('toggle-form')" class="text-blue-400 hover:text-blue-500 cursor-pointer">Login</span>
+            <span @click="login" class="text-blue-400 hover:text-blue-500 cursor-pointer">Login</span>
           </p>
         </form>
     </div>

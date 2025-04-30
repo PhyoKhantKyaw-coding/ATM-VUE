@@ -3,7 +3,7 @@
 </script>
 
 <template>
-    <div class="w-svw min-h-svh flex justify-center">
+    <div  class="min-h-screen min-w-screen flex items-center justify-center bg-gradient-to-br from-gray-700 to-gray-400">
         <RouterView />
     </div>
     <ClientOnly>

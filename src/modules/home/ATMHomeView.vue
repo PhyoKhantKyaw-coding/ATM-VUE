@@ -10,11 +10,11 @@ import {
   Key,
   LogOut
 } from 'lucide-vue-next'
-import WithdrawDepositDialog from '../user/WithdrawDepositeView.vue'
-import TransferView from '../user/TransferView.vue'
-import CheckBalanceView from '../user/CheckBalanceView.vue'; 
-import ChangePinView from '../user/ChangePinView.vue';
-import HistoryView from '../user/HistoryView.vue';
+import WithdrawDepositDialog from '../home/chunks/WithdrawDeposite.vue'
+import TransferDialog from './chunks/CreateTransfer.vue'
+import CheckBalanceDialog from '../home/chunks/CheckBalance.vue'
+import ChangePinDialog from '../home/chunks/ChangePin.vue'
+import HistoryDialog from '../home/chunks/UserHistory.vue'
 import { ref } from 'vue'
 
 import { useRouter } from 'vue-router'
@@ -37,13 +37,13 @@ const isTransactionHistoryDialogOpen = ref(false)
 <template>
   <div 
     class="min-h-screen min-w-screen flex items-center justify-center bg-gradient-to-br from-blue-500 via-gray-700 to-gray-900 px-6">
-    <div class="flex flex-col items-center w-full max-w-5xl rounded-3xl shadow-2xl bg-white/5 p-8 space-y-10">
+    <div class="flex flex-col items-center w-full max-w-7xl bg-clip-padding rounded-3xl shadow-2xl bg-white/5 p-8 space-y-10 h-[800px]">
       <!-- Header -->
       <p class="text-[60px] font-bold text-center text-white">Welcome to ATM Services</p>
       <!-- Button Sections -->
       <div class="flex items-center justify-between w-full">
         <!-- Left Buttons -->
-        <div class="flex flex-col mr-20 space-y-25 w-1/3">
+        <div class="flex flex-col mr-30 space-y-30 w-1/3">
           <!-- Withdraw Button -->
           <Button @click="isWithdrawDialogOpen = true"
             class="w-full py-10 flex items-center justify-center gap-4 text-3xl font-semibold text-black bg-blue-300 hover:bg-blue-700 transition-all duration-300 rounded-xl shadow-md">
@@ -72,7 +72,7 @@ const isTransactionHistoryDialogOpen = ref(false)
         </div>
 
         <!-- Right Buttons -->
-        <div class="flex flex-col ml-28 space-y-25 w-1/3">
+        <div class="flex flex-col ml-30 space-y-30 w-1/3">
           <!-- Check Balance Button -->
           <Button
             @click="isCheckBalanceDialogOpen = true"
@@ -90,12 +90,12 @@ const isTransactionHistoryDialogOpen = ref(false)
             <Key class="w-12 h-12" /> Change PIN
           </Button>
         </div>        
-          <TransferView v-model:open="isTransferDialogOpen" dialogTitle="Transfer Funds" />          
+          <TransferDialog v-model:open="isTransferDialogOpen" dialogTitle="Transfer Funds" />          
           <WithdrawDepositDialog v-model:open="isWithdrawDialogOpen" dialogTitle="Withdraw Cash" />
           <WithdrawDepositDialog v-model:open="isDepositDialogOpen" dialogTitle="Deposit Cash" />
-          <CheckBalanceView v-model:open="isCheckBalanceDialogOpen" dialogTitle="Check Balance" />
-          <ChangePinView v-model:open="isChangePinDialogOpen" dialogTitle="Change PIN" />
-          <HistoryView v-model:open="isTransactionHistoryDialogOpen" dialogTitle="Transaction History"  />
+          <CheckBalanceDialog v-model:open="isCheckBalanceDialogOpen" dialogTitle="Check Balance" />
+          <ChangePinDialog v-model:open="isChangePinDialogOpen" dialogTitle="Change PIN" />
+          <HistoryDialog v-model:open="isTransactionHistoryDialogOpen" dialogTitle="Transaction History"  />
       </div>
     </div>
   </div>

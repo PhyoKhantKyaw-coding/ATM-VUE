@@ -73,6 +73,9 @@ const onSubmit = form.handleSubmit((values) => {
     password: values.password
   })
 })
+const register = () => {
+  router.push('/register')
+}
 </script>  
 
 <template>
@@ -148,7 +151,7 @@ const onSubmit = form.handleSubmit((values) => {
         <!-- Toggle -->
         <p class="text-sm text-gray-400 mt-4 text-center">
           Don't have an account?
-          <span @click="$emit('toggle-form')" class="text-blue-400 hover:text-blue-500 cursor-pointer">Register</span>
+          <span @click="register" class="text-blue-400 hover:text-blue-500 cursor-pointer">Register</span>
         </p>
       </div>
 </template>
