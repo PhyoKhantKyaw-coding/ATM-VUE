@@ -140,7 +140,7 @@ const handleClose = () => {
       <div class="space-y-4 mt-6">
         <!-- Transaction History Table -->
         <div v-if="isTransactionHistory"
-          class="w-full h-[400px] border-2 border-gray-500 rounded-md bg-white/3 shadow-inner overflow-y-auto">
+          class="w-full h-[460px] border-2 border-gray-500 rounded-md bg-white/3 shadow-inner overflow-y-auto">
           <Table>
             <TableHeader class="sticky top-0 bg-gray-700 z-10">
               <TableRow>

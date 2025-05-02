@@ -30,7 +30,18 @@ const { mutate } = api.register.register.useMutation({
   onSuccess: (data) => {
     console.log('Register success response:', data)
     if (data.status === 0) {
-      toast.success('Registration successful') 
+      const user = data.data
+    const message = `Registration Successful!
+      Name: $${user.userName}
+      Amount: $${user.wallet}
+      Acount Number: ${user.acountNumber}`;
+
+    toast.success(message, {
+      style: {
+        width: '250px',
+        whiteSpace: 'pre-line'
+      }
+    });
       login()                 
     } else {
       toast.error('Registration failed')       
