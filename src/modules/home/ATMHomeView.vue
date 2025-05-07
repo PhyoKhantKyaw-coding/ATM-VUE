@@ -15,7 +15,7 @@ import WithdrawDepositDialog from '../home/chunks/WithdrawDeposite.vue'
 import TransferDialog from './chunks/CreateTransfer.vue'
 import CheckBalanceDialog from '../home/chunks/CheckBalance.vue'
 import ChangePinDialog from '../home/chunks/ChangePin.vue'
-import HistoryDialog from '../home/chunks/TransHistory.vue'
+import HistoryDialog from './chunks/UserHistory.vue'
 import { ref } from 'vue'
 
 import { useRouter } from 'vue-router'
