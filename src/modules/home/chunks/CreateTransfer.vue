@@ -33,8 +33,6 @@ const [amount] = defineField('amount')
 const [pin] = defineField('pin')
 const [message] = defineField('message')
 
-// FromId from localStorage
-const FromId = localStorage.getItem('userId') || ''
 
 // Setup API Mutation
 const { mutate: transferMutate, isPending } = api.transfer.transfer.useMutation({
@@ -79,7 +77,6 @@ const onSubmit = handleSubmit((formValues) => {
     amount: formValues.amount,
     pin: formValues.pin,
     Description: formValues.message || '',
-    FromId: FromId,
   }
   transferMutate(payload)
 })

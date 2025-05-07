@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Button from '@/components/ui/button/Button.vue'
+import Cookies from 'js-cookie'
 import {
   LockKeyholeOpen,
   Banknote,
@@ -14,7 +15,7 @@ import WithdrawDepositDialog from '../home/chunks/WithdrawDeposite.vue'
 import TransferDialog from './chunks/CreateTransfer.vue'
 import CheckBalanceDialog from '../home/chunks/CheckBalance.vue'
 import ChangePinDialog from '../home/chunks/ChangePin.vue'
-import HistoryDialog from '../home/chunks/UserHistory.vue'
+import HistoryDialog from '../home/chunks/TransHistory.vue'
 import { ref } from 'vue'
 
 import { useRouter } from 'vue-router'
@@ -22,7 +23,7 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 
 const handleLogout = () => {
-  localStorage.clear() 
+  Cookies.remove('token')
   router.push('/login') 
 }
 // Dialog control

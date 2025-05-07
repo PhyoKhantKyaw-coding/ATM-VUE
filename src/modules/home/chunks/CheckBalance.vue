@@ -5,11 +5,7 @@ import api from "@/api";
 
 const props = defineProps<{ open: boolean; dialogTitle: string }>();
 const emit = defineEmits(["update:open"]);
-
-const userId = localStorage.getItem("userId");
-
-// If userId is missing, you can handle it safely
-const { data: balanceResponse, refetch } = api.user.checkBalance.useQuery(userId || "");
+const { data: balanceResponse, refetch } = api.user.checkBalance.useQuery();
 
 // Watch for dialog open
 watch(

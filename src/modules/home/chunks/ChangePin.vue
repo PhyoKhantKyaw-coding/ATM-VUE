@@ -64,7 +64,6 @@ const onCancel = () => {
 // Submit function
 const onSubmit = handleSubmit((formValues) => {
   const payload : ChangePinPayload = {
-    id: localStorage.getItem('userId') || '',
     oldPin: formValues.currentPin,
     newPin: formValues.newPin,
     confirmPin: formValues.confirmPin,

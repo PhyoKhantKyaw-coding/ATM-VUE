@@ -77,7 +77,6 @@ const onCancel = () => {
 // Submit function
 const onSubmit = handleSubmit((values) => {
   const payload = {
-    id: localStorage.getItem('userId') ?? '',
     amount: Number(values.amount),
     pin: Number(values.confirmPin),
   }

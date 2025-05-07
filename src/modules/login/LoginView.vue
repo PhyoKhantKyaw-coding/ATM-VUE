@@ -9,6 +9,7 @@ import {toast} from 'vue-sonner'
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form'
 import Button from '@/components/ui/button/Button.vue'
 import Input from '@/components/ui/input/Input.vue'
+import Cookies from 'js-cookie'
 
 const router = useRouter()
 const loginAttempts = ref(0)
@@ -41,8 +42,7 @@ const {mutate } = api.login.login.useMutation({
     }
       return
     }
-    localStorage.setItem('userId', innerData.data.userID)
-    localStorage.setItem('token', innerData.token)
+    Cookies.set('token', innerData.token)
     toast.success('Login successful!')
     router.push('/')
   },

@@ -3,6 +3,7 @@ import ATMHomeView from '@/modules/home/ATMHomeView.vue';
 import LoginView from '@/modules/login/LoginView.vue';
 import RegisterView from '@/modules/register/RegisterView.vue';
 import { createRouter, createWebHistory } from 'vue-router';
+import Cookies from 'js-cookie';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -16,43 +17,24 @@ const router = createRouter({
           path: '',
           component: ATMHomeView,
           meta: { requiresAuth: true }
-        }
-      ]
-    },
-    {
-      path: '/login',
-      component: DefaultLayout,
-      children: [
+        },
         {
           name: 'login',
-          path: '',
+          path: '/login',
           component: LoginView,
           meta: { requiresAuth: false }
-        }
-      ]
-    },
-    {
-      path: '/register',
-      component: DefaultLayout,
-      children: [
+        },
         {
           name: 'register',
-          path: '',
+          path: '/register',
           component: RegisterView,
           meta: { requiresAuth: false }
         }
       ]
-    },
-    {
-      path: '/',
-      redirect: '/login'
-    }
-  ]
+    }]
 });
-
-
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('token');
+  const token = Cookies.get('token'); 
   if (to.meta.requiresAuth && !token) {
     next('/login');
   }
