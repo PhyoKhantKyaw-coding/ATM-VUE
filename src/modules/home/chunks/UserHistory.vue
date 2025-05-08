@@ -141,7 +141,7 @@ const transactionColumns = [
       const amount = Number.parseFloat(row.getValue('amount'));
       const formatted = new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: 'USD',
+        currency: 'MMK',
       }).format(amount);
       return h('div', { class: 'text-right font-medium' }, formatted);
     },
@@ -182,7 +182,7 @@ const transferColumns = [
       const amount = Number.parseFloat(row.getValue('amount'));
       const formatted = new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: 'USD',
+        currency: 'MMK',
       }).format(amount);
       return h('div', { class: 'text-right font-medium' }, formatted);
     },
